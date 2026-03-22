@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
-    "@hono/zod-validator": "^0.4.3",
     "@monorepo-test/shared": "workspace:*",
+    "@orpc/server": "^1.13.9",
     "better-sqlite3": "^11.8.1",
     "drizzle-orm": "^0.39.3",
     "hono": "^4.7.4",

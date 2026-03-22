@@ -1,6 +1,6 @@
-import { todoListSchema, type Todo } from "@monorepo-test/shared";
+import { type Todo } from "@monorepo-test/shared";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { api } from "../api/client";
+import { orpc } from "../api/orpc";
 
 export function TodosPage() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -11,13 +11,8 @@ export function TodosPage() {
   const loadTodos = useCallback(async () => {
     setError(null);
     try {
-      const { data } = await api.get<unknown>("/api/todos");
-      const parsed = todoListSchema.safeParse(data);
-      if (!parsed.success) {
-        setError("Invalid response from server");
-        return;
-      }
-      setTodos(parsed.data);
+      const data = await orpc.todos.list({});
+      setTodos(data);
     } catch {
       setError("Failed to load todos");
     } finally {
@@ -35,15 +30,8 @@ export function TodosPage() {
     if (!trimmed) return;
     setError(null);
     try {
-      const { data } = await api.post<unknown>("/api/todos", {
-        title: trimmed,
-      });
-      const one = todoListSchema.element.safeParse(data);
-      if (!one.success) {
-        setError("Invalid create response");
-        return;
-      }
-      setTodos((prev) => [...prev, one.data]);
+      const created = await orpc.todos.create({ title: trimmed });
+      setTodos((prev) => [...prev, created]);
       setTitle("");
     } catch {
       setError("Failed to create todo");
@@ -53,17 +41,11 @@ export function TodosPage() {
   async function toggleCompleted(todo: Todo) {
     setError(null);
     try {
-      const { data } = await api.patch<unknown>(`/api/todos/${todo.id}`, {
+      const updated = await orpc.todos.update({
+        id: todo.id,
         completed: !todo.completed,
       });
-      const one = todoListSchema.element.safeParse(data);
-      if (!one.success) {
-        setError("Invalid update response");
-        return;
-      }
-      setTodos((prev) =>
-        prev.map((t) => (t.id === todo.id ? one.data : t)),
-      );
+      setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
     } catch {
       setError("Failed to update todo");
     }
@@ -72,7 +54,7 @@ export function TodosPage() {
   async function removeTodo(id: number) {
     setError(null);
     try {
-      await api.delete(`/api/todos/${id}`);
+      await orpc.todos.remove({ id });
       setTodos((prev) => prev.filter((t) => t.id !== id));
     } catch {
       setError("Failed to delete todo");
