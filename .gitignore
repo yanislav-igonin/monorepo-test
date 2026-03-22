@@ -1,0 +1,19 @@
+# Dependencies
+node_modules
+
+# Build & tooling
+dist
+.turbo
+*.tsbuildinfo
+
+# Environment
+.env
+.env.*.local
+
+# Database (local SQLite)
+*.db
+**/data/
+
+# OS & editors
+.DS_Store
+*.log
