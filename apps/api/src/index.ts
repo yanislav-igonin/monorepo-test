@@ -3,6 +3,7 @@ import { onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { auth } from "./auth.js";
 import { appRouter } from "./orpc/router.js";
 
 const app = new Hono();
@@ -10,11 +11,14 @@ const app = new Hono();
 app.use(
   "/*",
   cors({
-    origin: "*",
+    origin: process.env.WEB_ORIGIN ?? "http://localhost:5173",
     allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allowHeaders: ["Content-Type"],
+    credentials: true,
   }),
 );
+
+app.on(["GET", "POST"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 
 const rpcHandler = new RPCHandler(appRouter, {
   interceptors: [
@@ -25,9 +29,10 @@ const rpcHandler = new RPCHandler(appRouter, {
 });
 
 app.use("/rpc/*", async (c, next) => {
+  const session = await auth.api.getSession({ headers: c.req.raw.headers });
   const { matched, response } = await rpcHandler.handle(c.req.raw, {
     prefix: "/rpc",
-    context: {},
+    context: { session },
   });
   if (matched) {
     return c.newResponse(response.body, response);
