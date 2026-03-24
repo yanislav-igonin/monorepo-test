@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { todos } from "../../db/schema.js";
 import type { AuthenticatedContext } from "../base.js";
-import { rowToTodo } from "./helpers.js";
+import { buildTodoUpdatePatch, rowToTodo } from "./helpers.js";
 
 interface TodoUpdateOptions {
   input: UpdateTodoInput;
@@ -23,10 +23,7 @@ export async function todoUpdate({ input, context }: TodoUpdateOptions) {
   }
   const [row] = db
     .update(todos)
-    .set({
-      title: title ?? existing.title,
-      completed: completed ?? existing.completed,
-    })
+    .set(buildTodoUpdatePatch(existing, { title, completed }))
     .where(ownerFilter)
     .returning()
     .all();
