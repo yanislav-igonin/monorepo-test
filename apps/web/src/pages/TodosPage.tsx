@@ -1,67 +1,59 @@
-import { type Todo } from "@monorepo-test/shared";
-import { useCallback, useEffect, useState, type FormEvent } from "react";
-import { orpc } from "../api/orpc";
+import type { Todo } from "@monorepo-test/shared";
+import { type FormEvent, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  createTodoMutationOptions,
+  removeTodoMutationOptions,
+  updateTodoMutationOptions,
+  todosListQueryOptions,
+} from "../api/todos";
 
 export function TodosPage() {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const loadTodos = useCallback(async () => {
-    setError(null);
-    try {
-      const data = await orpc.todos.list({});
-      setTodos(data);
-    } catch {
-      setError("Failed to load todos");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    void loadTodos();
-  }, [loadTodos]);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const queryClient = useQueryClient();
+  const todosQuery = useQuery(todosListQueryOptions());
+  const createTodoMutation = useMutation(createTodoMutationOptions(queryClient));
+  const updateTodoMutation = useMutation(updateTodoMutationOptions(queryClient));
+  const removeTodoMutation = useMutation(removeTodoMutationOptions(queryClient));
+  const todos = todosQuery.data ?? [];
+  const loadError = todosQuery.isError ? "Failed to load todos" : null;
 
   async function handleAdd(e: FormEvent) {
     e.preventDefault();
     const trimmed = title.trim();
+    setActionError(null);
     if (!trimmed) return;
-    setError(null);
     try {
-      const created = await orpc.todos.create({ title: trimmed });
-      setTodos((prev) => [...prev, created]);
+      await createTodoMutation.mutateAsync({ title: trimmed });
       setTitle("");
     } catch {
-      setError("Failed to create todo");
+      setActionError("Failed to create todo");
     }
   }
 
   async function toggleCompleted(todo: Todo) {
-    setError(null);
+    setActionError(null);
     try {
-      const updated = await orpc.todos.update({
+      await updateTodoMutation.mutateAsync({
         id: todo.id,
         completed: !todo.completed,
       });
-      setTodos((prev) => prev.map((t) => (t.id === todo.id ? updated : t)));
     } catch {
-      setError("Failed to update todo");
+      setActionError("Failed to update todo");
     }
   }
 
   async function removeTodo(id: number) {
-    setError(null);
+    setActionError(null);
     try {
-      await orpc.todos.remove({ id });
-      setTodos((prev) => prev.filter((t) => t.id !== id));
+      await removeTodoMutation.mutateAsync({ id });
     } catch {
-      setError("Failed to delete todo");
+      setActionError("Failed to delete todo");
     }
   }
 
-  if (loading) {
+  if (todosQuery.isPending) {
     return <p>Loading…</p>;
   }
 
@@ -78,7 +70,9 @@ export function TodosPage() {
         />
         <button type="submit">Add</button>
       </form>
-      {error ? <p className="error">{error}</p> : null}
+      {actionError || loadError ? (
+        <p className="error">{actionError ?? loadError}</p>
+      ) : null}
       <ul className="todo-list">
         {todos.map((todo) => (
           <li key={todo.id}>

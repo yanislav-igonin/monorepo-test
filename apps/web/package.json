@@ -6,22 +6,30 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "test": "vitest",
     "preview": "vite preview"
   },
   "dependencies": {
     "@monorepo-test/shared": "workspace:*",
     "@orpc/client": "^1.13.9",
     "@orpc/contract": "^1.13.9",
+    "@orpc/tanstack-query": "^1.13.9",
+    "@tanstack/react-query": "5.95.2",
     "better-auth": "^1.5.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1"
   },
   "devDependencies": {
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
+    "jsdom": "^25.0.1",
     "typescript": "^5.7.3",
-    "vite": "^6.0.11"
+    "vite": "^6.0.11",
+    "vitest": "^2.1.9"
   }
 }

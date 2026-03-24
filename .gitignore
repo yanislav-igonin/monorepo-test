@@ -17,3 +17,6 @@ dist
 # OS & editors
 .DS_Store
 *.log
+
+# OpenCode Sisyphus
+.sisyphus
