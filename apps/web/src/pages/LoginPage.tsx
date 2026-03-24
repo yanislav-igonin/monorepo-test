@@ -1,19 +1,30 @@
-import { type FormEvent, useState } from "react";
+import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authClient } from "../api/auth";
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const { data: session, isPending: isSessionPending } = authClient.useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
+  useEffect(() => {
+    if (!isSessionPending && session) {
+      void navigate("/");
+    }
+  }, [isSessionPending, navigate, session]);
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setPending(true);
     setError(null);
-    const { error } = await authClient.signIn.email({ email, password });
+    const { error } = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: "/",
+    });
     setPending(false);
     if (error) {
       setError(error.message ?? "Login failed");
