@@ -4,6 +4,7 @@ import { RPCHandler } from "@orpc/server/fetch";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { auth } from "./auth.js";
+import { createORPCContext } from "./orpc/context.js";
 import { appRouter } from "./orpc/router.js";
 
 const app = new Hono();
@@ -29,10 +30,9 @@ const rpcHandler = new RPCHandler(appRouter, {
 });
 
 app.use("/rpc/*", async (c, next) => {
-  const session = await auth.api.getSession({ headers: c.req.raw.headers });
   const { matched, response } = await rpcHandler.handle(c.req.raw, {
     prefix: "/rpc",
-    context: { session },
+    context: await createORPCContext(c.req.raw),
   });
   if (matched) {
     return c.newResponse(response.body, response);

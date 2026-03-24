@@ -8,6 +8,12 @@ const baseURL =
 
 const link = new RPCLink({
   url: `${baseURL}/rpc`,
+  fetch(request, init) {
+    return fetch(request, {
+      ...init,
+      credentials: "include",
+    });
+  },
 });
 
 export const orpcClient: TodoOrpcClient = createORPCClient(link);

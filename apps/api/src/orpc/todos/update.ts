@@ -1,13 +1,23 @@
 import type { UpdateTodoInput } from "@monorepo-test/shared";
 import { ORPCError } from "@orpc/server";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../../db/index.js";
 import { todos } from "../../db/schema.js";
+import type { AuthenticatedContext } from "../base.js";
 import { rowToTodo } from "./helpers.js";
 
-export async function todoUpdate(input: UpdateTodoInput) {
+interface TodoUpdateOptions {
+  input: UpdateTodoInput;
+  context: AuthenticatedContext;
+}
+
+export async function todoUpdate({ input, context }: TodoUpdateOptions) {
   const { id, title, completed } = input;
-  const [existing] = db.select().from(todos).where(eq(todos.id, id)).all();
+  const ownerFilter = and(
+    eq(todos.id, id),
+    eq(todos.userId, context.session.user.id),
+  );
+  const [existing] = db.select().from(todos).where(ownerFilter).all();
   if (!existing) {
     throw new ORPCError("NOT_FOUND", { message: "Not found" });
   }
@@ -17,7 +27,7 @@ export async function todoUpdate(input: UpdateTodoInput) {
       title: title ?? existing.title,
       completed: completed ?? existing.completed,
     })
-    .where(eq(todos.id, id))
+    .where(ownerFilter)
     .returning()
     .all();
   if (!row) {

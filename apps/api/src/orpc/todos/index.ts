@@ -1,15 +1,14 @@
-import { todoContract } from "@monorepo-test/shared";
-import { implement } from "@orpc/server";
+import { protectedRouter } from "../base.js";
 import { todoCreate } from "./create.js";
 import { todoList } from "./list.js";
 import { todoRemove } from "./remove.js";
 import { todoUpdate } from "./update.js";
 
-const i = implement(todoContract);
+const protectedTodos = protectedRouter.todos;
 
-export const todosRouter = i.todos.router({
-  list: i.todos.list.handler(async () => todoList()),
-  create: i.todos.create.handler(async ({ input }) => todoCreate(input)),
-  update: i.todos.update.handler(async ({ input }) => todoUpdate(input)),
-  remove: i.todos.remove.handler(async ({ input }) => todoRemove(input)),
+export const todosRouter = protectedTodos.router({
+  list: protectedTodos.list.handler(todoList),
+  create: protectedTodos.create.handler(todoCreate),
+  update: protectedTodos.update.handler(todoUpdate),
+  remove: protectedTodos.remove.handler(todoRemove),
 });
