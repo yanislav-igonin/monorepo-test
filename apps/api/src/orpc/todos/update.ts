@@ -7,28 +7,28 @@ import type { AuthenticatedContext } from "../base.js";
 import { buildTodoUpdatePatch, rowToTodo } from "./helpers.js";
 
 interface TodoUpdateOptions {
-  input: UpdateTodoInput;
-  context: AuthenticatedContext;
+	input: UpdateTodoInput;
+	context: AuthenticatedContext;
 }
 
 export async function todoUpdate({ input, context }: TodoUpdateOptions) {
-  const { id, title, completed } = input;
-  const ownerFilter = and(
-    eq(todos.id, id),
-    eq(todos.userId, context.session.user.id),
-  );
-  const [existing] = db.select().from(todos).where(ownerFilter).all();
-  if (!existing) {
-    throw new ORPCError("NOT_FOUND", { message: "Not found" });
-  }
-  const [row] = db
-    .update(todos)
-    .set(buildTodoUpdatePatch(existing, { title, completed }))
-    .where(ownerFilter)
-    .returning()
-    .all();
-  if (!row) {
-    throw new ORPCError("NOT_FOUND", { message: "Not found" });
-  }
-  return rowToTodo(row);
+	const { id, title, completed } = input;
+	const ownerFilter = and(
+		eq(todos.id, id),
+		eq(todos.userId, context.session.user.id),
+	);
+	const [existing] = db.select().from(todos).where(ownerFilter).all();
+	if (!existing) {
+		throw new ORPCError("NOT_FOUND", { message: "Not found" });
+	}
+	const [row] = db
+		.update(todos)
+		.set(buildTodoUpdatePatch(existing, { title, completed }))
+		.where(ownerFilter)
+		.returning()
+		.all();
+	if (!row) {
+		throw new ORPCError("NOT_FOUND", { message: "Not found" });
+	}
+	return rowToTodo(row);
 }

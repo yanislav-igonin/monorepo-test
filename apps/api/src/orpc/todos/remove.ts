@@ -5,18 +5,18 @@ import { todos } from "../../db/schema.js";
 import type { AuthenticatedContext } from "../base.js";
 
 interface TodoRemoveOptions {
-  input: { id: number };
-  context: AuthenticatedContext;
+	input: { id: number };
+	context: AuthenticatedContext;
 }
 
 export async function todoRemove({ input, context }: TodoRemoveOptions) {
-  const { id } = input;
-  const [removed] = db
-    .delete(todos)
-    .where(and(eq(todos.id, id), eq(todos.userId, context.session.user.id)))
-    .returning()
-    .all();
-  if (!removed) {
-    throw new ORPCError("NOT_FOUND", { message: "Not found" });
-  }
+	const { id } = input;
+	const [removed] = db
+		.delete(todos)
+		.where(and(eq(todos.id, id), eq(todos.userId, context.session.user.id)))
+		.returning()
+		.all();
+	if (!removed) {
+		throw new ORPCError("NOT_FOUND", { message: "Not found" });
+	}
 }

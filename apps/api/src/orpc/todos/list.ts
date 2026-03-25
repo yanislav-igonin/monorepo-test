@@ -5,15 +5,15 @@ import type { AuthenticatedContext } from "../base.js";
 import { rowToTodo } from "./helpers.js";
 
 interface TodoListOptions {
-  context: AuthenticatedContext;
+	context: AuthenticatedContext;
 }
 
 export async function todoList({ context }: TodoListOptions) {
-  const rows = db
-    .select()
-    .from(todos)
-    .where(eq(todos.userId, context.session.user.id))
-    .all();
+	const rows = db
+		.select()
+		.from(todos)
+		.where(eq(todos.userId, context.session.user.id))
+		.all();
 
-  return rows.map(rowToTodo);
+	return rows.map(rowToTodo);
 }

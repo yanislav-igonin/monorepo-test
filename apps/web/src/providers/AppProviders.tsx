@@ -3,11 +3,13 @@ import { useState, type ReactNode } from "react";
 import { createAppQueryClient } from "../api/query-client";
 
 type AppProvidersProps = {
-  children: ReactNode;
+	children: ReactNode;
 };
 
 export function AppProviders({ children }: AppProvidersProps) {
-  const [queryClient] = useState(() => createAppQueryClient());
+	const [queryClient] = useState(() => createAppQueryClient());
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+	return (
+		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+	);
 }

@@ -7,19 +7,19 @@ const i = implement(todoContract).$context<ORPCContext>();
 export type AuthenticatedSession = NonNullable<Session>;
 
 export interface AuthenticatedContext {
-  session: AuthenticatedSession;
+	session: AuthenticatedSession;
 }
 
 export const protectedRouter = i.use(({ context, next }) => {
-  if (!context.session) {
-    throw new ORPCError("UNAUTHORIZED", { message: "Unauthorized" });
-  }
+	if (!context.session) {
+		throw new ORPCError("UNAUTHORIZED", { message: "Unauthorized" });
+	}
 
-  return next({
-    context: {
-      session: context.session,
-    },
-  });
+	return next({
+		context: {
+			session: context.session,
+		},
+	});
 });
 
 export { i };

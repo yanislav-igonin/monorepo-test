@@ -10,34 +10,34 @@ import { SignupPage } from "./pages/SignupPage";
 import { TodosPage } from "./pages/TodosPage";
 
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/signup",
-    element: <SignupPage />,
-  },
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      { index: true, element: <TodosPage /> },
-      { path: "about", element: <AboutPage /> },
-    ],
-  },
+	{
+		path: "/login",
+		element: <LoginPage />,
+	},
+	{
+		path: "/signup",
+		element: <SignupPage />,
+	},
+	{
+		path: "/",
+		element: <App />,
+		children: [
+			{ index: true, element: <TodosPage /> },
+			{ path: "about", element: <AboutPage /> },
+		],
+	},
 ]);
 
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
-  throw new Error('Root element "root" was not found.');
+	throw new Error('Root element "root" was not found.');
 }
 
 createRoot(rootElement).render(
-  <StrictMode>
-    <AppProviders>
-      <RouterProvider router={router} />
-    </AppProviders>
-  </StrictMode>,
+	<StrictMode>
+		<AppProviders>
+			<RouterProvider router={router} />
+		</AppProviders>
+	</StrictMode>,
 );
