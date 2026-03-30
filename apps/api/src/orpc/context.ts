@@ -1,10 +1,9 @@
 import { auth } from "../auth.js";
 
 export type Session = Awaited<ReturnType<typeof auth.api.getSession>>;
-
-export interface ORPCContext {
+export type ORPCContext = {
 	session: Session;
-}
+};
 
 export async function createORPCContext(
 	request: Request,

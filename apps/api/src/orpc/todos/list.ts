@@ -4,9 +4,9 @@ import { todos } from "../../db/schema.js";
 import type { AuthenticatedContext } from "../base.js";
 import { rowToTodo } from "./helpers.js";
 
-interface TodoListOptions {
+type TodoListOptions = {
 	context: AuthenticatedContext;
-}
+};
 
 export async function todoList({ context }: TodoListOptions) {
 	const rows = db

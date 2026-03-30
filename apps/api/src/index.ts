@@ -4,6 +4,7 @@ import { RPCHandler } from "@orpc/server/fetch";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { auth } from "./auth.js";
+import { appConfig } from "./config.js";
 import { createORPCContext } from "./orpc/context.js";
 import { appRouter } from "./orpc/router.js";
 
@@ -12,7 +13,7 @@ const app = new Hono();
 app.use(
 	"/*",
 	cors({
-		origin: process.env.WEB_ORIGIN ?? "http://localhost:5173",
+		origin: appConfig.web.origin,
 		allowMethods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
 		allowHeaders: ["Content-Type"],
 		credentials: true,
@@ -40,7 +41,7 @@ app.use("/rpc/*", async (c, next) => {
 	await next();
 });
 
-const port = Number(process.env.PORT) || 3001;
+const port = appConfig.server.port;
 
 serve(
 	{

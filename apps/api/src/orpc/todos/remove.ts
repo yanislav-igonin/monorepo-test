@@ -4,10 +4,10 @@ import { db } from "../../db/index.js";
 import { todos } from "../../db/schema.js";
 import type { AuthenticatedContext } from "../base.js";
 
-interface TodoRemoveOptions {
+type TodoRemoveOptions = {
 	input: { id: number };
 	context: AuthenticatedContext;
-}
+};
 
 export async function todoRemove({ input, context }: TodoRemoveOptions) {
 	const { id } = input;

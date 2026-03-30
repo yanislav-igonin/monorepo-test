@@ -5,10 +5,10 @@ import { todos } from "../../db/schema.js";
 import type { AuthenticatedContext } from "../base.js";
 import { rowToTodo } from "./helpers.js";
 
-interface TodoCreateOptions {
+type TodoCreateOptions = {
 	input: CreateTodoBody;
 	context: AuthenticatedContext;
-}
+};
 
 export async function todoCreate({ input, context }: TodoCreateOptions) {
 	const { title } = input;

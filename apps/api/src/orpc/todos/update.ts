@@ -6,10 +6,10 @@ import { todos } from "../../db/schema.js";
 import type { AuthenticatedContext } from "../base.js";
 import { buildTodoUpdatePatch, rowToTodo } from "./helpers.js";
 
-interface TodoUpdateOptions {
+type TodoUpdateOptions = {
 	input: UpdateTodoInput;
 	context: AuthenticatedContext;
-}
+};
 
 export async function todoUpdate({ input, context }: TodoUpdateOptions) {
 	const { id, title, completed } = input;
