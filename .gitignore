@@ -20,3 +20,6 @@ dist
 
 # OpenCode Sisyphus
 .sisyphus
+
+.pnpm-store
+.OpenCode
