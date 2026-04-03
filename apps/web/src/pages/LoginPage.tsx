@@ -1,6 +1,7 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authClient } from "../api/auth";
+import { Button } from "@/components/ui/button";
 
 export function LoginPage() {
 	const navigate = useNavigate();
@@ -57,9 +58,9 @@ export function LoginPage() {
 					/>
 				</div>
 				{error && <p style={{ color: "red" }}>{error}</p>}
-				<button type="submit" disabled={pending}>
+				<Button variant="default" size="lg" disabled={pending} type="submit">
 					{pending ? "Logging in…" : "Login"}
-				</button>
+				</Button>
 			</form>
 			<p>
 				Don&apos;t have an account? <Link to="/signup">Sign up</Link>
