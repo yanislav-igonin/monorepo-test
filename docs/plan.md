@@ -41,6 +41,9 @@ Simple-first rule:
 - Introduce extra layers only after concrete need and discussion.
 - Config should live in a single `config` file with a nested object, not in scattered env helpers.
 
+## Plan Maintenance Rules
+- After each completed task, immediately mark it as completed in this roadmap before moving on.
+
 ## Wave 1 Backlog
 
 - [x] `0. Roadmap document`
@@ -50,9 +53,9 @@ Simple-first rule:
   - Keep service architecture simple and local to the app.
   - Do not add framework-like abstractions for service modules.
 - [ ] `2. UI foundation`
-  - Install `Mantine` packages for `apps/web`.
-  - Connect `MantineProvider`, global styles, and a shared theme entry point.
-  - Define the baseline app shell, form primitives, and shared page layout on top of `Mantine`.
+  - [x] Install `Mantine` packages for `apps/web`.
+  - [x] Connect `MantineProvider`, global styles, and a shared theme entry point.
+  - [ ] Define the baseline app shell, form primitives, and shared page layout on top of `Mantine`.
 - [ ] `3. Page-by-page UI refresh`
   - Update one page per iteration; do not batch all page rewrites into a single change.
   - [ ] `3.1 App shell and navigation`
