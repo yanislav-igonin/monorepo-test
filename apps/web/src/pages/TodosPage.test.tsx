@@ -1,8 +1,7 @@
 import type { Todo } from "@monorepo-test/shared";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createAppQueryClient } from "../api/query-client";
+import { AppProviders } from "../providers/AppProviders";
 import { TodosPage } from "./TodosPage";
 
 const todosMocks = vi.hoisted(() => {
@@ -84,12 +83,10 @@ vi.mock("../api/todos", () => ({
 }));
 
 function renderTodosPage() {
-	const queryClient = createAppQueryClient();
-
 	return render(
-		<QueryClientProvider client={queryClient}>
+		<AppProviders>
 			<TodosPage />
-		</QueryClientProvider>,
+		</AppProviders>,
 	);
 }
 
@@ -137,7 +134,7 @@ describe("TodosPage", () => {
 
 		const error = await screen.findByText("Failed to load todos");
 
-		expect(error).toHaveClass("error");
+		expect(error.closest(".error")).not.toBeNull();
 	});
 
 	it("creates a todo, invalidates the list query, and resets the input on success", async () => {
@@ -312,9 +309,9 @@ describe("TodosPage", () => {
 			);
 		});
 
-		expect(await screen.findByText("Failed to update todo")).toHaveClass(
-			"error",
-		);
+		expect(
+			(await screen.findByText("Failed to update todo")).closest(".error"),
+		).not.toBeNull();
 		expect(screen.getByText("Existing todo")).toBeInTheDocument();
 
 		fireEvent.click(screen.getByRole("button", { name: "Delete" }));
@@ -326,9 +323,9 @@ describe("TodosPage", () => {
 			);
 		});
 
-		expect(await screen.findByText("Failed to delete todo")).toHaveClass(
-			"error",
-		);
+		expect(
+			(await screen.findByText("Failed to delete todo")).closest(".error"),
+		).not.toBeNull();
 		expect(screen.getByText("Existing todo")).toBeInTheDocument();
 	});
 
@@ -361,7 +358,7 @@ describe("TodosPage", () => {
 
 		const error = await screen.findByText("Failed to create todo");
 
-		expect(error).toHaveClass("error");
+		expect(error.closest(".error")).not.toBeNull();
 		expect(screen.getByText("Existing todo")).toBeInTheDocument();
 		expect(
 			(screen.getByLabelText("Todo title") as HTMLInputElement).value,
