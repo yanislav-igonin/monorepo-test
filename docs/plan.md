@@ -50,21 +50,18 @@ Simple-first rule:
   - Keep service architecture simple and local to the app.
   - Do not add framework-like abstractions for service modules.
 - [ ] `2. UI foundation`
-  - Add Tailwind to `apps/web` and wire it into Vite.
-  - Do not add `shadcn/ui` in this iteration.
-  - Do not update pages or build UI primitives yet.
-- [ ] `3. App shell baseline`
+  - Add Tailwind and `shadcn/ui`.
   - Build the baseline app shell, form primitives, and settings skeleton.
-- [ ] `4. Email module`
+- [ ] `3. Email module`
   - Add `EmailService`, local/mock provider, env config, and server wiring.
   - Keep it transactional-only in v1.
-- [ ] `5. Storage module`
+- [ ] `4. Storage module`
   - Add `StorageService`, local provider, S3-ready adapter boundary, and upload flow.
-- [ ] `6. Feature flags module`
+- [ ] `5. Feature flags module`
   - Add `FeatureFlagService`, local static provider, and a clean resolver flow.
-- [ ] `7. Jobs module`
+- [ ] `6. Jobs module`
   - Add `JobQueueService`, in-process provider, and a sample async job flow.
-- [ ] `8. Hardening pass`
+- [ ] `7. Hardening pass`
   - Normalize naming and config conventions across all services.
   - Update this document to match the real implementation.
 
