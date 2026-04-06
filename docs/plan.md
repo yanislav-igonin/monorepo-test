@@ -50,18 +50,32 @@ Simple-first rule:
   - Keep service architecture simple and local to the app.
   - Do not add framework-like abstractions for service modules.
 - [ ] `2. UI foundation`
-  - Add Tailwind and `shadcn/ui`.
-  - Build the baseline app shell, form primitives, and settings skeleton.
-- [ ] `3. Email module`
+  - Install `Mantine` packages for `apps/web`.
+  - Connect `MantineProvider`, global styles, and a shared theme entry point.
+  - Define the baseline app shell, form primitives, and shared page layout on top of `Mantine`.
+- [ ] `3. Page-by-page UI refresh`
+  - Update one page per iteration; do not batch all page rewrites into a single change.
+  - [ ] `3.1 App shell and navigation`
+    - Refresh the authenticated layout in `App.tsx`.
+    - Move shared navigation and session actions onto `Mantine` components.
+  - [ ] `3.2 Login page`
+    - Rebuild the login form and states with `Mantine`.
+  - [ ] `3.3 Signup page`
+    - Rebuild the signup form, OAuth CTA, and validation states with `Mantine`.
+  - [ ] `3.4 Todos page`
+    - Rebuild list, add form, item actions, loading, and error states with `Mantine`.
+  - [ ] `3.5 About page`
+    - Refresh the static informational page to match the shared layout and typography.
+- [ ] `4. Email module`
   - Add `EmailService`, local/mock provider, env config, and server wiring.
   - Keep it transactional-only in v1.
-- [ ] `4. Storage module`
+- [ ] `5. Storage module`
   - Add `StorageService`, local provider, S3-ready adapter boundary, and upload flow.
-- [ ] `5. Feature flags module`
+- [ ] `6. Feature flags module`
   - Add `FeatureFlagService`, local static provider, and a clean resolver flow.
-- [ ] `6. Jobs module`
+- [ ] `7. Jobs module`
   - Add `JobQueueService`, in-process provider, and a sample async job flow.
-- [ ] `7. Hardening pass`
+- [ ] `8. Hardening pass`
   - Normalize naming and config conventions across all services.
   - Update this document to match the real implementation.
 
