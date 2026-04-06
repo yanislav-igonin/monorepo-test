@@ -67,7 +67,7 @@ Simple-first rule:
   - [x] `3.2 Login page`
     - Rebuild the login form and states with `Mantine`.
     - Keep only email, password, submit action, and sign-up link.
-  - [ ] `3.3 Signup page`
+  - [x] `3.3 Signup page`
     - Rebuild the signup form, OAuth CTA, and validation states with `Mantine`.
     - Keep only required fields, sign-up action, Google CTA, and return-to-login link.
   - [ ] `3.4 Todos page`
