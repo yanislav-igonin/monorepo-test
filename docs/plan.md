@@ -40,6 +40,9 @@ Simple-first rule:
 - Prefer boring and obvious code over abstractions made “for the future”.
 - Introduce extra layers only after concrete need and discussion.
 - Config should live in a single `config` file with a nested object, not in scattered env helpers.
+- UI should stay minimal: only required form fields, actions, and navigation.
+- Avoid decorative sections, marketing copy, gradients, and extra widgets unless explicitly requested.
+- Prefer very small border radius.
 
 ## Plan Maintenance Rules
 - After each completed task, immediately mark it as completed in this roadmap before moving on.
@@ -58,13 +61,15 @@ Simple-first rule:
   - [ ] Define the baseline app shell, form primitives, and shared page layout on top of `Mantine`.
 - [ ] `3. Page-by-page UI refresh`
   - Update one page per iteration; do not batch all page rewrites into a single change.
-  - [ ] `3.1 App shell and navigation`
+  - [x] `3.1 App shell and navigation`
     - Refresh the authenticated layout in `App.tsx`.
     - Move shared navigation and session actions onto `Mantine` components.
-  - [ ] `3.2 Login page`
+  - [x] `3.2 Login page`
     - Rebuild the login form and states with `Mantine`.
+    - Keep only email, password, submit action, and sign-up link.
   - [ ] `3.3 Signup page`
     - Rebuild the signup form, OAuth CTA, and validation states with `Mantine`.
+    - Keep only required fields, sign-up action, Google CTA, and return-to-login link.
   - [ ] `3.4 Todos page`
     - Rebuild list, add form, item actions, loading, and error states with `Mantine`.
   - [ ] `3.5 About page`

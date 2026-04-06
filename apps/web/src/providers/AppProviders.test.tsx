@@ -1,9 +1,9 @@
-import { useMantineTheme } from "@mantine/core";
 import { useQueryClient } from "@tanstack/react-query";
 import type { QueryClient } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { createAppQueryClient } from "../api/query-client";
+import { useMantineTheme } from "../components/ui";
 import { AppProviders } from "./AppProviders";
 
 function ClientProbe({
@@ -67,6 +67,6 @@ describe("AppProviders", () => {
 			</AppProviders>,
 		);
 
-		expect(primaryColors).toEqual(["blue"]);
+		expect(primaryColors).toEqual(["teal"]);
 	});
 });

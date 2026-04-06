@@ -1,7 +1,7 @@
-import { MantineProvider } from "@mantine/core";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
 import { createAppQueryClient } from "../api/query-client";
+import { MantineProvider } from "../components/ui";
 import { appTheme } from "../theme/app-theme";
 
 type AppProvidersProps = {

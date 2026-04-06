@@ -1,10 +1,11 @@
-import { createTheme } from "@mantine/core";
+import { createTheme } from "../components/ui";
 
 export const appTheme = createTheme({
-	primaryColor: "blue",
-	defaultRadius: "md",
-	fontFamily: "system-ui, sans-serif",
+	primaryColor: "teal",
+	defaultRadius: "xs",
+	fontFamily: '"IBM Plex Sans", "Segoe UI", sans-serif',
 	headings: {
-		fontFamily: "system-ui, sans-serif",
+		fontFamily: '"Space Grotesk", "IBM Plex Sans", sans-serif',
+		fontWeight: "600",
 	},
 });

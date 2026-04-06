@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { createMemoryRouter, RouterProvider } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { AppProviders } from "../providers/AppProviders";
 import { LoginPage } from "./LoginPage";
 
 const authMocks = vi.hoisted(() => ({
@@ -34,7 +35,11 @@ function renderLoginPage() {
 		},
 	);
 
-	return render(<RouterProvider router={router} />);
+	return render(
+		<AppProviders>
+			<RouterProvider router={router} />
+		</AppProviders>,
+	);
 }
 
 describe("LoginPage", () => {
@@ -54,10 +59,10 @@ describe("LoginPage", () => {
 
 		renderLoginPage();
 
-		fireEvent.change(screen.getByPlaceholderText("Email"), {
+		fireEvent.change(screen.getByPlaceholderText("user@example.com"), {
 			target: { value: "user@example.com" },
 		});
-		fireEvent.change(screen.getByPlaceholderText("Password"), {
+		fireEvent.change(screen.getByPlaceholderText("Your password"), {
 			target: { value: "hunter2" },
 		});
 		fireEvent.click(screen.getByRole("button", { name: "Login" }));
@@ -72,6 +77,28 @@ describe("LoginPage", () => {
 
 		expect(
 			await screen.findByRole("heading", { name: "Todos" }),
+		).toBeInTheDocument();
+	});
+
+	it("shows an authentication error returned by the email login request", async () => {
+		authMocks.signInEmail.mockResolvedValueOnce({
+			error: {
+				message: "Invalid credentials",
+			},
+		});
+
+		renderLoginPage();
+
+		fireEvent.change(screen.getByPlaceholderText("user@example.com"), {
+			target: { value: "user@example.com" },
+		});
+		fireEvent.change(screen.getByPlaceholderText("Your password"), {
+			target: { value: "wrong-password" },
+		});
+		fireEvent.click(screen.getByRole("button", { name: "Login" }));
+
+		expect(
+			await screen.findByText("Invalid credentials"),
 		).toBeInTheDocument();
 	});
 

@@ -1,6 +1,20 @@
 import { type FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authClient } from "../api/auth";
+import {
+	Alert,
+	Anchor,
+	Button,
+	Center,
+	Container,
+	Loader,
+	Paper,
+	PasswordInput,
+	Stack,
+	Text,
+	TextInput,
+	Title,
+} from "../components/ui";
 
 export function LoginPage() {
 	const navigate = useNavigate();
@@ -34,36 +48,65 @@ export function LoginPage() {
 		}
 	}
 
+	if (isSessionPending) {
+		return (
+			<Center mih="100vh">
+				<Loader size="sm" />
+			</Center>
+		);
+	}
+
 	return (
-		<div>
-			<h1>Login</h1>
-			<form onSubmit={handleSubmit}>
-				<div>
-					<input
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						placeholder="Email"
-						required
-					/>
-				</div>
-				<div>
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						placeholder="Password"
-						required
-					/>
-				</div>
-				{error && <p style={{ color: "red" }}>{error}</p>}
-				<button type="submit" disabled={pending}>
-					{pending ? "Logging in…" : "Login"}
-				</button>
-			</form>
-			<p>
-				Don&apos;t have an account? <Link to="/signup">Sign up</Link>
-			</p>
-		</div>
+		<Center mih="100vh" px="md">
+			<Container size={360} w="100%">
+				<Paper p="lg" withBorder>
+					<Stack gap="md">
+						<Title order={2}>Login</Title>
+
+						{error ? (
+							<Alert color="red" title="Unable to sign in" variant="light">
+								{error}
+							</Alert>
+						) : null}
+
+						<form onSubmit={handleSubmit}>
+							<Stack gap="md">
+								<TextInput
+									autoComplete="email"
+									id="login-email"
+									label="Email"
+									onChange={(e) => setEmail(e.target.value)}
+									placeholder="user@example.com"
+									required
+									type="email"
+									value={email}
+								/>
+
+								<PasswordInput
+									autoComplete="current-password"
+									id="login-password"
+									label="Password"
+									onChange={(e) => setPassword(e.target.value)}
+									placeholder="Your password"
+									required
+									value={password}
+								/>
+
+								<Button fullWidth loading={pending} type="submit">
+									Login
+								</Button>
+							</Stack>
+						</form>
+
+						<Text c="dimmed" size="sm">
+							Don&apos;t have an account?{" "}
+							<Anchor component={Link} fw={600} to="/signup">
+								Sign up
+							</Anchor>
+						</Text>
+					</Stack>
+				</Paper>
+			</Container>
+		</Center>
 	);
 }
