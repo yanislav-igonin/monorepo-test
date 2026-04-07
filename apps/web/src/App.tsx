@@ -10,8 +10,10 @@ import { NavLink as RouterNavLink, Outlet, useLocation, useNavigate } from "reac
 import { authClient } from "./api/auth";
 import {
 	ActionIcon,
+	Affix,
 	AppShell,
 	Avatar,
+	Box,
 	Burger,
 	Button,
 	Center,
@@ -91,7 +93,6 @@ export function App() {
 
 	return (
 		<AppShell
-			header={{ height: 64 }}
 			navbar={{
 				breakpoint: "sm",
 				collapsed: { mobile: !mobileOpened },
@@ -99,67 +100,58 @@ export function App() {
 			}}
 			padding="lg"
 		>
-			<AppShell.Header>
-				<Group h="100%" justify="space-between" px="md">
-					<Group gap="sm">
-						<Burger
-							aria-label={mobileOpened ? "Close navigation" : "Open navigation"}
-							hiddenFrom="sm"
-							onClick={toggleMobile}
-							opened={mobileOpened}
-							size="sm"
-						/>
-						<Stack gap={0}>
-							<Text fw={700} size="sm">
-								Workspace
-							</Text>
-							<Text c="dimmed" size="xs">
-								{activeItem.label}
-							</Text>
-						</Stack>
-					</Group>
+			<Affix hiddenFrom="sm" position={{ left: 16, top: 16 }} zIndex={300}>
+				<Box>
+					<Burger
+						aria-label={mobileOpened ? "Close navigation" : "Open navigation"}
+						onClick={toggleMobile}
+						opened={mobileOpened}
+						size="sm"
+					/>
+				</Box>
+			</Affix>
 
-					<Group gap="sm" wrap="nowrap">
-						<Group gap="sm" wrap="nowrap">
-							<Avatar color="teal" radius="xl" size="sm">
-								{getInitials(profileLabel)}
-							</Avatar>
-							<Stack gap={0} visibleFrom="xs">
-								<Text fw={600} size="sm">
-									{profileLabel}
-								</Text>
-								<Text c="dimmed" size="xs">
-									{profileCaption}
-								</Text>
-							</Stack>
-						</Group>
-						<Button
-							leftSection={<SignOut aria-hidden="true" size={16} />}
-							onClick={() => void handleLogout()}
-							size="xs"
-							variant="default"
-						>
-							Log out
-						</Button>
-					</Group>
-				</Group>
-			</AppShell.Header>
-
-			<AppShell.Navbar p="sm">
-				<AppShell.Section>
-					<Group justify={sidebarCollapsed ? "center" : "space-between"}>
-						{sidebarCollapsed ? null : (
-							<Stack gap={0}>
-								<Text fw={700} size="sm">
-									Navigation
-								</Text>
-								<Text c="dimmed" size="xs">
-									Authorized pages
-								</Text>
-							</Stack>
+			<AppShell.Navbar p={0} py="sm">
+				<AppShell.Section px="sm">
+					<Group
+						align="flex-start"
+						justify={sidebarCollapsed ? "center" : "space-between"}
+						wrap="nowrap"
+					>
+						{!sidebarCollapsed ? (
+							<Group gap="sm" wrap="nowrap">
+								<Box hiddenFrom="sm">
+									<Burger
+										aria-label={
+											mobileOpened ? "Close navigation" : "Open navigation"
+										}
+										onClick={toggleMobile}
+										opened={mobileOpened}
+										size="sm"
+									/>
+								</Box>
+								<Stack gap={0}>
+									<Text fw={700} size="sm">
+										Workspace
+									</Text>
+									<Text c="dimmed" size="xs">
+										{activeItem.label}
+									</Text>
+								</Stack>
+							</Group>
+						) : (
+							<Box hiddenFrom="sm">
+								<Burger
+									aria-label={
+										mobileOpened ? "Close navigation" : "Open navigation"
+									}
+									onClick={toggleMobile}
+									opened={mobileOpened}
+									size="sm"
+								/>
+							</Box>
 						)}
 						<Tooltip
-							disabled={false}
 							label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
 							position="right"
 						>
@@ -184,8 +176,8 @@ export function App() {
 
 				<Divider my="sm" />
 
-				<AppShell.Section grow>
-					<Stack gap="xs">
+				<AppShell.Section grow px={0}>
+					<Stack align="stretch" gap="xs">
 						{navigationItems.map((item) => {
 							const isActive = item.end
 								? location.pathname === item.to
@@ -208,7 +200,7 @@ export function App() {
 										style={(theme) => ({
 											width: "100%",
 											display: "block",
-											padding: theme.spacing.xs,
+											padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
 											borderRadius: theme.radius.sm,
 											color: isActive
 												? theme.colors.teal[8]
@@ -229,6 +221,7 @@ export function App() {
 										<Group
 											gap="sm"
 											justify={sidebarCollapsed ? "center" : "flex-start"}
+											w="100%"
 											wrap="nowrap"
 										>
 											<ThemeIcon
@@ -255,9 +248,59 @@ export function App() {
 						})}
 					</Stack>
 				</AppShell.Section>
+
+				<Divider my="sm" />
+
+				<AppShell.Section px="sm">
+					{sidebarCollapsed ? (
+						<Stack align="center" gap="sm">
+							<Tooltip label={profileLabel} position="right">
+								<Avatar color="teal" radius="xl" size="sm">
+									{getInitials(profileLabel)}
+								</Avatar>
+							</Tooltip>
+							<Tooltip label="Log out" position="right">
+								<ActionIcon
+									aria-label="Log out"
+									color="gray"
+									onClick={() => void handleLogout()}
+									size="lg"
+									variant="default"
+								>
+									<SignOut aria-hidden="true" size={18} />
+								</ActionIcon>
+							</Tooltip>
+						</Stack>
+					) : (
+						<Stack align="stretch" gap="sm">
+							<Group gap="sm" wrap="nowrap">
+								<Avatar color="teal" radius="xl" size="sm">
+									{getInitials(profileLabel)}
+								</Avatar>
+								<Stack gap={0}>
+									<Text fw={600} size="sm">
+										{profileLabel}
+									</Text>
+									<Text c="dimmed" size="xs">
+										{profileCaption}
+									</Text>
+								</Stack>
+							</Group>
+							<Button
+								fullWidth
+								leftSection={<SignOut aria-hidden="true" size={16} />}
+								onClick={() => void handleLogout()}
+								size="xs"
+								variant="default"
+							>
+								Log out
+							</Button>
+						</Stack>
+					)}
+				</AppShell.Section>
 			</AppShell.Navbar>
 
-			<AppShell.Main>
+			<AppShell.Main pt={{ base: 48, sm: "lg" }}>
 				<Outlet />
 			</AppShell.Main>
 		</AppShell>

@@ -1,9 +1,11 @@
 export { ActionIcon } from "./ActionIcon";
+export { Affix } from "./Affix";
 export { Alert } from "./Alert";
 export { Anchor } from "./Anchor";
 export { AppShell } from "./AppShell";
 export { Avatar } from "./Avatar";
 export { Badge } from "./Badge";
+export { Box } from "./Box";
 export { Button } from "./Button";
 export { Burger } from "./Burger";
 export { Center } from "./Center";

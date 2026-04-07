@@ -90,16 +90,13 @@ export function TodosPage() {
 
 	return (
 		<Container px={0} size="lg">
-			<Stack gap="lg">
+			<Stack gap="md">
 				<Group align="flex-end" justify="space-between">
 					<div>
 						<Text c="dimmed" fw={600} size="xs" tt="uppercase">
 							Tasks
 						</Text>
 						<Title order={1}>Todos</Title>
-						<Text c="dimmed" size="sm">
-							Keep the authenticated workspace focused on the next obvious step.
-						</Text>
 					</div>
 					<Badge color="gray" size="lg" variant="light">
 						{todos.length} {todos.length === 1 ? "item" : "items"}
