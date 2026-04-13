@@ -114,14 +114,18 @@ describe("TodosPage", () => {
 
 		todosMocks.listQueryFn.mockResolvedValueOnce(todos);
 
-		const { container } = renderTodosPage();
+		renderTodosPage();
 
 		expect(screen.getByText("Loading…")).toBeInTheDocument();
 
 		expect(await screen.findByText("Buy milk")).toBeInTheDocument();
 		expect(screen.getByLabelText("Toggle Buy milk")).not.toBeChecked();
-		expect(container.querySelector(".add-todo")).toBeInTheDocument();
-		expect(container.querySelector(".todo-list")).toBeInTheDocument();
+		expect(
+			screen.getByRole("textbox", { name: "Todo title" }),
+		).toBeInTheDocument();
+		expect(
+			screen.getByRole("button", { name: /^Add$/ }),
+		).toBeInTheDocument();
 		expect(screen.queryByText("Loading…")).not.toBeInTheDocument();
 	});
 
@@ -132,9 +136,9 @@ describe("TodosPage", () => {
 
 		expect(screen.getByText("Loading…")).toBeInTheDocument();
 
-		const error = await screen.findByText("Failed to load todos");
+		const error = await screen.findByRole("alert");
 
-		expect(error.closest(".error")).not.toBeNull();
+		expect(error).toHaveTextContent("Failed to load todos");
 	});
 
 	it("creates a todo, invalidates the list query, and resets the input on success", async () => {
@@ -232,7 +236,6 @@ describe("TodosPage", () => {
 		});
 
 		expect(await screen.findByLabelText("Toggle Existing todo")).toBeChecked();
-		expect(screen.getByText("Existing todo")).toHaveClass("done");
 	});
 
 	it("deletes a todo through a mutation and refreshes the list", async () => {
@@ -271,7 +274,7 @@ describe("TodosPage", () => {
 		expect(await screen.findByText("Keep me")).toBeInTheDocument();
 		expect(screen.getByText("Remove me")).toBeInTheDocument();
 
-		fireEvent.click(screen.getAllByRole("button", { name: "Delete" })[1]);
+		fireEvent.click(screen.getByRole("button", { name: "Delete Remove me" }));
 
 		await waitFor(() => {
 			expect(todosMocks.removeTodo).toHaveBeenCalledWith(
@@ -309,12 +312,12 @@ describe("TodosPage", () => {
 			);
 		});
 
-		expect(
-			(await screen.findByText("Failed to update todo")).closest(".error"),
-		).not.toBeNull();
+		expect(await screen.findByRole("alert")).toHaveTextContent(
+			"Failed to update todo",
+		);
 		expect(screen.getByText("Existing todo")).toBeInTheDocument();
 
-		fireEvent.click(screen.getByRole("button", { name: "Delete" }));
+		fireEvent.click(screen.getByRole("button", { name: "Delete Existing todo" }));
 
 		await waitFor(() => {
 			expect(todosMocks.removeTodo).toHaveBeenCalledWith(
@@ -323,9 +326,9 @@ describe("TodosPage", () => {
 			);
 		});
 
-		expect(
-			(await screen.findByText("Failed to delete todo")).closest(".error"),
-		).not.toBeNull();
+		expect(await screen.findByRole("alert")).toHaveTextContent(
+			"Failed to delete todo",
+		);
 		expect(screen.getByText("Existing todo")).toBeInTheDocument();
 	});
 
@@ -356,9 +359,9 @@ describe("TodosPage", () => {
 			);
 		});
 
-		const error = await screen.findByText("Failed to create todo");
+		const error = await screen.findByRole("alert");
 
-		expect(error.closest(".error")).not.toBeNull();
+		expect(error).toHaveTextContent("Failed to create todo");
 		expect(screen.getByText("Existing todo")).toBeInTheDocument();
 		expect(
 			(screen.getByLabelText("Todo title") as HTMLInputElement).value,

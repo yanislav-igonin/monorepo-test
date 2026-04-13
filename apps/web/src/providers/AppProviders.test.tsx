@@ -3,7 +3,6 @@ import type { QueryClient } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { createAppQueryClient } from "../api/query-client";
-import { useMantineTheme } from "../components/ui";
 import { AppProviders } from "./AppProviders";
 
 function ClientProbe({
@@ -14,14 +13,6 @@ function ClientProbe({
 	const client = useQueryClient();
 
 	onClient(client);
-
-	return null;
-}
-
-function ThemeProbe({ onTheme }: { onTheme: (primaryColor: string) => void }) {
-	const theme = useMantineTheme();
-
-	onTheme(theme.primaryColor);
 
 	return null;
 }
@@ -58,15 +49,13 @@ describe("AppProviders", () => {
 		expect(clients[0]).toBe(clients[1]);
 	});
 
-	it("provides the shared Mantine theme", () => {
-		const primaryColors: string[] = [];
-
-		render(
+	it("renders plain children without an extra theme wrapper", () => {
+		const { getByText } = render(
 			<AppProviders>
-				<ThemeProbe onTheme={(primaryColor) => primaryColors.push(primaryColor)} />
+				<div>child content</div>
 			</AppProviders>,
 		);
 
-		expect(primaryColors).toEqual(["teal"]);
+		expect(getByText("child content")).toBeInTheDocument();
 	});
 });

@@ -13,13 +13,10 @@
 	},
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.2.8",
-		"@mantine/core": "^9.0.1",
-		"@mantine/hooks": "^9.0.1",
 		"@monorepo-test/shared": "workspace:*",
 		"@orpc/client": "^1.13.9",
 		"@orpc/contract": "^1.13.9",
 		"@orpc/tanstack-query": "^1.13.9",
-		"@phosphor-icons/react": "^2.1.10",
 		"@tailwindcss/vite": "^4.2.2",
 		"@tanstack/react-query": "5.95.2",
 		"better-auth": "^1.5.6",

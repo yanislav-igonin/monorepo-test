@@ -67,7 +67,7 @@ describe("App", () => {
 	it("renders the authenticated shell and allows navigation between pages", async () => {
 		renderApp();
 
-		expect(screen.getByText("user@example.com")).toBeInTheDocument();
+		expect(screen.getAllByText("user@example.com").length).toBeGreaterThan(0);
 
 		fireEvent.click(screen.getByRole("link", { name: /About/ }));
 
