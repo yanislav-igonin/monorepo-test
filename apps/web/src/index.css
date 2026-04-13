@@ -91,7 +91,7 @@ body {
 	--chart-3: oklch(0.726 0.123 88);
 	--chart-4: oklch(0.651 0.168 38);
 	--chart-5: oklch(0.577 0.104 250);
-	--radius: 1rem;
+	--radius: 0.75rem;
 	--sidebar: oklch(0.972 0.012 90);
 	--sidebar-foreground: oklch(0.258 0.03 224);
 	--sidebar-primary: oklch(0.472 0.095 205);
@@ -113,10 +113,6 @@ body {
 
 	body {
 		@apply bg-background text-foreground antialiased;
-		background-image:
-			radial-gradient(circle at top left, oklch(0.94 0.028 184 / 0.9), transparent 22rem),
-			radial-gradient(circle at top right, oklch(0.96 0.03 82 / 0.75), transparent 18rem),
-			linear-gradient(180deg, oklch(0.993 0.003 95), oklch(0.975 0.007 92));
 	}
 
 	::selection {
