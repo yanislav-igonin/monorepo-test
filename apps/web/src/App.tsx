@@ -8,19 +8,16 @@ import {
 } from "react-router-dom";
 import { authClient } from "./api/auth";
 import { Avatar, AvatarFallback } from "./components/ui/avatar";
-import { Button } from "./components/ui/button";
 import {
 	Sidebar,
 	SidebarContent,
 	SidebarFooter,
 	SidebarGroup,
-	SidebarHeader,
 	SidebarInset,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 	SidebarProvider,
-	SidebarSeparator,
 	SidebarTrigger,
 } from "./components/ui/sidebar";
 
@@ -71,12 +68,6 @@ export function App() {
 
 	const email = session.user.email ?? "Unknown user";
 	const profileLabel = session.user.name?.trim() || email;
-	const activeItem =
-		navigationItems.find((item) =>
-			item.end
-				? location.pathname === item.to
-				: location.pathname.startsWith(item.to),
-		) ?? navigationItems[0];
 
 	async function handleLogout() {
 		await authClient.signOut();
@@ -86,7 +77,31 @@ export function App() {
 	return (
 		<SidebarProvider defaultOpen>
 			<Sidebar collapsible="icon">
-				<SidebarHeader>
+				<SidebarContent>
+					<SidebarGroup>
+						<SidebarMenu>
+							{navigationItems.map((item) => {
+								const isActive = item.end
+									? location.pathname === item.to
+									: location.pathname.startsWith(item.to);
+								const Icon = item.icon;
+
+								return (
+									<SidebarMenuItem key={item.to}>
+										<SidebarMenuButton asChild isActive={isActive} tooltip={item.label}>
+											<RouterNavLink end={item.end} to={item.to}>
+												<Icon aria-hidden="true" />
+												<span>{item.label}</span>
+											</RouterNavLink>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+								);
+							})}
+						</SidebarMenu>
+					</SidebarGroup>
+				</SidebarContent>
+
+				<SidebarFooter>
 					<div className="flex items-center gap-3 px-2 py-1">
 						<Avatar>
 							<AvatarFallback>{getInitials(profileLabel)}</AvatarFallback>
@@ -100,41 +115,7 @@ export function App() {
 							</p>
 						</div>
 					</div>
-				</SidebarHeader>
 
-				<SidebarSeparator />
-
-				<SidebarContent>
-					<SidebarGroup>
-						<SidebarMenu>
-							{navigationItems.map((item) => {
-								const isActive = item.end
-									? location.pathname === item.to
-									: location.pathname.startsWith(item.to);
-								const Icon = item.icon;
-
-								return (
-									<SidebarMenuItem key={item.to}>
-										<SidebarMenuButton
-											asChild
-											isActive={isActive}
-											tooltip={item.label}
-										>
-											<RouterNavLink end={item.end} to={item.to}>
-												<Icon aria-hidden="true" />
-												<span>{item.label}</span>
-											</RouterNavLink>
-										</SidebarMenuButton>
-									</SidebarMenuItem>
-								);
-							})}
-						</SidebarMenu>
-					</SidebarGroup>
-				</SidebarContent>
-
-				<SidebarSeparator />
-
-				<SidebarFooter>
 					<SidebarMenu>
 						<SidebarMenuItem>
 							<SidebarMenuButton
@@ -150,27 +131,9 @@ export function App() {
 			</Sidebar>
 
 			<SidebarInset>
-				<header className="flex h-14 items-center gap-3 border-b px-4 md:px-6">
-					<SidebarTrigger />
-					<div className="min-w-0">
-						<p className="text-sm font-medium text-foreground">{activeItem.label}</p>
-					</div>
-					<div className="ml-auto hidden truncate text-sm text-muted-foreground sm:block">
-						{email}
-					</div>
-					<Button
-						aria-label="Sign out"
-						className="sm:hidden"
-						size="icon-sm"
-						type="button"
-						variant="ghost"
-						onClick={() => void handleLogout()}
-					>
-						<LogOut aria-hidden="true" />
-					</Button>
-				</header>
+				<SidebarTrigger className="absolute top-4 left-4 z-20 border bg-background shadow-sm md:top-6 md:left-6" />
 
-				<main className="flex-1 px-4 py-6 md:px-6">
+				<main className="flex-1 px-4 pb-6 pt-20 md:px-6 md:pb-6 md:pt-24">
 					<div className="mx-auto w-full max-w-4xl">
 						<Outlet />
 					</div>

@@ -68,6 +68,10 @@ describe("App", () => {
 		renderApp();
 
 		expect(screen.getAllByText("user@example.com").length).toBeGreaterThan(0);
+		expect(
+			screen.getByRole("button", { name: "Toggle Sidebar" }),
+		).toBeInTheDocument();
+		expect(screen.getByRole("link", { name: /Todos/ })).toBeInTheDocument();
 
 		fireEvent.click(screen.getByRole("link", { name: /About/ }));
 
