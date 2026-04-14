@@ -16,7 +16,7 @@ describe("rowToTodo", () => {
 			id: 7,
 			title: "Write tests",
 			completed: false,
-			createdAt: "2026-03-24T12:00:00.000Z",
+			createdAt: new Date("2026-03-24T12:00:00.000Z"),
 		});
 	});
 });

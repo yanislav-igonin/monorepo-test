@@ -4,6 +4,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppProviders } from "../providers/AppProviders";
 import { TodosPage } from "./TodosPage";
 
+const todoCreatedAt = new Date("2026-03-24T00:00:00.000Z");
+
 const todosMocks = vi.hoisted(() => {
 	const listQueryKey = ["todos", "list"] as const;
 	const listQueryFn = vi.fn();
@@ -108,7 +110,7 @@ describe("TodosPage", () => {
 				id: 1,
 				title: "Buy milk",
 				completed: false,
-				createdAt: "2026-03-24T00:00:00.000Z",
+				createdAt: todoCreatedAt,
 			},
 		];
 
@@ -148,7 +150,7 @@ describe("TodosPage", () => {
 					id: 1,
 					title: "Existing todo",
 					completed: false,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 			])
 			.mockResolvedValueOnce([
@@ -156,20 +158,20 @@ describe("TodosPage", () => {
 					id: 1,
 					title: "Existing todo",
 					completed: false,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 				{
 					id: 2,
 					title: "New todo",
 					completed: false,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 			]);
 		todosMocks.createTodo.mockResolvedValueOnce({
 			id: 2,
 			title: "New todo",
 			completed: false,
-			createdAt: "2026-03-24T00:00:00.000Z",
+			createdAt: todoCreatedAt,
 		});
 
 		renderTodosPage();
@@ -204,7 +206,7 @@ describe("TodosPage", () => {
 					id: 1,
 					title: "Existing todo",
 					completed: false,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 			])
 			.mockResolvedValueOnce([
@@ -212,14 +214,14 @@ describe("TodosPage", () => {
 					id: 1,
 					title: "Existing todo",
 					completed: true,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 			]);
 		todosMocks.updateTodo.mockResolvedValueOnce({
 			id: 1,
 			title: "Existing todo",
 			completed: true,
-			createdAt: "2026-03-24T00:00:00.000Z",
+			createdAt: todoCreatedAt,
 		});
 
 		renderTodosPage();
@@ -245,13 +247,13 @@ describe("TodosPage", () => {
 					id: 1,
 					title: "Keep me",
 					completed: false,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 				{
 					id: 2,
 					title: "Remove me",
 					completed: false,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 			])
 			.mockResolvedValueOnce([
@@ -259,14 +261,14 @@ describe("TodosPage", () => {
 					id: 1,
 					title: "Keep me",
 					completed: false,
-					createdAt: "2026-03-24T00:00:00.000Z",
+					createdAt: todoCreatedAt,
 				},
 			]);
 		todosMocks.removeTodo.mockResolvedValueOnce({
 			id: 2,
 			title: "Remove me",
 			completed: false,
-			createdAt: "2026-03-24T00:00:00.000Z",
+			createdAt: todoCreatedAt,
 		});
 
 		renderTodosPage();
@@ -293,7 +295,7 @@ describe("TodosPage", () => {
 				id: 1,
 				title: "Existing todo",
 				completed: false,
-				createdAt: "2026-03-24T00:00:00.000Z",
+				createdAt: todoCreatedAt,
 			},
 		]);
 		todosMocks.updateTodo.mockRejectedValueOnce(new Error("network down"));
@@ -338,7 +340,7 @@ describe("TodosPage", () => {
 				id: 1,
 				title: "Existing todo",
 				completed: false,
-				createdAt: "2026-03-24T00:00:00.000Z",
+				createdAt: todoCreatedAt,
 			},
 		]);
 		todosMocks.createTodo.mockRejectedValueOnce(new Error("network down"));

@@ -7,7 +7,7 @@ export function rowToTodo(row: TodoRow): Todo {
 		id: row.id,
 		title: row.title,
 		completed: row.completed,
-		createdAt: row.createdAt,
+		createdAt: new Date(row.createdAt),
 	};
 }
 
